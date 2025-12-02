@@ -1,15 +1,34 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en" dir="ltr">
 <head>
-  <meta charset="UTF-8">
-  <title>نظام تتبع الموظفين</title>
+  <meta charset="UTF-8" />
+  <title>Employee Tracking System</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
+    :root {
+      --primary: #1f7a4d;
+      --primary-light: #33a268;
+      --danger: #c0392b;
+      --bg: #f4f6f9;
+      --card-bg: #ffffff;
+      --border: #dde3ec;
+      --text-main: #333333;
+      --text-muted: #777777;
+      --shadow-soft: 0 8px 18px rgba(0,0,0,0.08);
+      --radius-lg: 18px;
+      --radius-md: 12px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
     body {
-      font-family: Arial, sans-serif;
-      background: #f4f6f9;
       margin: 0;
       padding: 0;
-      color: #333;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top left, #e3f3ff 0, #f4f6f9 40%, #f4f6f9 100%);
+      color: var(--text-main);
     }
 
     .page {
@@ -18,427 +37,622 @@
       padding: 20px 15px 40px;
     }
 
+    /* Header */
+
     .header {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 10px;
+      gap: 12px;
       margin-bottom: 20px;
     }
 
-    .logo-box {
-      flex: 1;
-      text-align: center;
+    .header-logos {
+      display: flex;
+      align-items: center;
+      gap: 12px;
     }
 
-    .logo-box img {
-      max-width: 100%;
-      max-height: 60px;
+    .header-logos img {
+      height: 42px;
       object-fit: contain;
     }
 
-    .card {
-      background: #ffffff;
-      border-radius: 12px;
-      padding: 20px;
-      box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+    .header-text {
+      text-align: right;
     }
 
-    h1 {
-      font-size: 22px;
-      margin: 0 0 10px;
-      text-align: center;
-      color: #006c5f;
+    .title {
+      margin: 0;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .subtitle {
+      margin: 4px 0 0;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    /* Card */
+
+    .card {
+      background: var(--card-bg);
+      border-radius: var(--radius-lg);
+      padding: 20px 18px 16px;
+      box-shadow: var(--shadow-soft);
+      border: 1px solid rgba(0,0,0,0.02);
     }
 
     .welcome {
-      text-align: center;
-      margin-bottom: 20px;
-      font-size: 14px;
-      color: #555;
+      background: linear-gradient(135deg, #1f7a4d, #33a268);
+      color: #fff;
+      border-radius: var(--radius-md);
+      padding: 14px 14px 12px;
+      margin-bottom: 18px;
+      position: relative;
+      overflow: hidden;
     }
 
-    .role-grid {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 20px;
+    .welcome::after {
+      content: "";
+      position: absolute;
+      top: -40px;
+      right: -40px;
+      width: 90px;
+      height: 90px;
+      border-radius: 999px;
+      border: 2px solid rgba(255,255,255,0.25);
     }
 
-    .role {
-      flex: 1;
-      border-radius: 10px;
-      padding: 12px;
-      text-align: center;
-      cursor: pointer;
-      border: 2px solid transparent;
-      transition: 0.2s;
-      background: #f8fafc;
+    .welcome-title {
+      margin: 0 0 4px;
+      font-size: 16px;
+      font-weight: 600;
     }
 
-    .role:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    .welcome-text {
+      margin: 0;
+      font-size: 13px;
+      opacity: 0.92;
     }
 
-    .role.selected {
-      border-color: #00897b;
-      background: #e0f4f1;
-    }
+    /* Role buttons */
 
-    .role-icon {
-      font-size: 26px;
+    .section-label {
+      font-size: 13px;
+      font-weight: 600;
       margin-bottom: 6px;
     }
 
-    .role-title {
-      font-weight: bold;
-      margin-bottom: 3px;
+    .role-row {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 14px;
     }
 
-    .role-sub {
+    .role-btn {
+      flex: 1;
+      background: #f3f5f9;
+      border-radius: 14px;
+      padding: 10px 10px 9px;
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      transition: 0.18s ease;
+    }
+
+    .role-btn-icon {
+      width: 30px;
+      height: 30px;
+      border-radius: 999px;
+      background: #e4f4ec;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 17px;
+    }
+
+    .role-btn-text {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .role-btn-title {
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .role-btn-sub {
       font-size: 11px;
-      color: #666;
+      color: var(--text-muted);
+    }
+
+    .role-btn.selected {
+      background: #e4f5eb;
+      border-color: var(--primary-light);
+      box-shadow: 0 0 0 1px rgba(31,122,77,0.25);
+    }
+
+    /* Form fields */
+
+    .form-row {
+      margin-bottom: 12px;
     }
 
     label {
       display: block;
-      margin-top: 10px;
-      font-size: 13px;
+      font-size: 12px;
+      margin-bottom: 4px;
+      color: var(--text-muted);
     }
 
-    input {
+    input, select {
       width: 100%;
-      box-sizing: border-box;
-      padding: 10px;
-      margin-top: 5px;
-      border-radius: 8px;
-      border: 1px solid #ccd3df;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      padding: 9px 11px;
       font-size: 14px;
+      outline: none;
+      transition: 0.15s ease;
+      background: #fbfcff;
     }
 
-    input[readonly] {
-      background: #f1f3f6;
+    input:focus, select:focus {
+      border-color: var(--primary-light);
+      box-shadow: 0 0 0 1px rgba(31,122,77,0.08);
+      background: #ffffff;
+    }
+
+    .coords {
+      font-size: 13px;
+      color: var(--primary);
+      margin-top: 4px;
+      direction: ltr;
+      text-align: left;
+    }
+
+    .coords span {
+      font-family: "SF Mono", ui-monospace, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    }
+
+    .hint {
+      font-size: 11.5px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .hint strong {
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    /* Status + buttons */
+
+    .status-box {
+      margin-top: 12px;
+      padding: 10px 11px 9px;
+      border-radius: 11px;
+      background: #f7fafc;
+      border: 1px solid #e1e7f0;
+      font-size: 12.5px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .status-pill {
+      padding: 4px 9px;
+      border-radius: 999px;
+      background: #e5f4ec;
+      color: #167346;
+      font-size: 11.5px;
+      font-weight: 600;
+      text-transform: lowercase;
+    }
+
+    .status-message {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .status-message span.error {
+      color: var(--danger);
+      font-weight: 500;
     }
 
     .btn-row {
       display: flex;
       gap: 10px;
-      margin-top: 18px;
+      margin-top: 16px;
     }
 
-    button {
+    .btn {
       flex: 1;
-      padding: 12px;
-      border-radius: 10px;
+      border-radius: 12px;
       border: none;
-      font-size: 15px;
+      padding: 11px 10px;
+      font-size: 14px;
+      font-weight: 600;
       cursor: pointer;
+      transition: 0.16s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
     }
 
-    #btnStart {
-      background: #00897b;
+    .btn-primary {
+      background: var(--primary);
       color: #fff;
     }
 
-    #btnStop {
-      background: #e53935;
-      color: #fff;
+    .btn-primary:hover {
+      background: var(--primary-light);
     }
 
-    button:disabled {
-      opacity: 0.5;
+    .btn-danger {
+      background: #f3e1df;
+      color: var(--danger);
+    }
+
+    .btn-danger:hover {
+      background: #e8c7c2;
+    }
+
+    .btn:disabled {
+      opacity: 0.6;
       cursor: not-allowed;
     }
 
-    .status-box {
-      margin-top: 12px;
-      font-size: 13px;
-      padding: 10px;
-      border-radius: 8px;
-      background: #f1f3f6;
-      color: #444;
+    .footer-note {
+      margin-top: 10px;
+      font-size: 11.5px;
+      color: var(--text-muted);
+      text-align: center;
+      line-height: 1.5;
     }
 
-    .status-badge {
-      display: inline-block;
-      padding: 2px 8px;
-      border-radius: 999px;
-      font-size: 11px;
-      margin-right: 5px;
-      background: #eceff1;
-    }
+    @media (max-width: 520px) {
+      .page {
+        padding-inline: 10px;
+      }
 
-    .status-start { background: #c8e6c9; }
-    .status-running { background: #fff9c4; }
-    .status-end { background: #ffcdd2; }
+      .header {
+        flex-direction: row;
+        align-items: flex-start;
+      }
 
-    .small {
-      font-size: 11px;
-      color: #777;
-      margin-top: 5px;
+      .header-text {
+        text-align: right;
+      }
+
+      .header-logos img {
+        height: 36px;
+      }
     }
   </style>
 </head>
 <body>
-
-<div class="page">
-
-  <!-- الشعارات -->
-  <div class="header">
-    <div class="logo-box">
-      <!-- ضع ملف شعار أمانة جدة باسم jeddah-logo.png بجانب ملف HTML -->
-      <img src="jeddah-logo.png" alt="أمانة جدة">
-    </div>
-    <div class="logo-box">
-      <!-- ضع ملف شعار Applus باسم applus-logo.png بجانب ملف HTML -->
-      <img src="applus-logo.png" alt="Applus">
-    </div>
-  </div>
-
-  <div class="card">
-    <h1>نظام تتبع الموظفين</h1>
-    <div class="welcome">
-      أهلاً بك 👋<br>
-      اختر نوع عملك، ثم ابدأ الجولة ليتم تسجيل موقعك تلقائيًا أثناء العمل.
-    </div>
-
-    <!-- اختيار نوع الموظف -->
-    <div class="role-grid">
-      <div class="role" id="roleDriver" data-type="driver">
-        <div class="role-icon">🚛</div>
-        <div class="role-title">سائق</div>
-        <div class="role-sub">Driver</div>
+  <div class="page">
+    <!-- HEADER -->
+    <header class="header">
+      <div class="header-logos">
+        <!-- Put real image URLs from Imgur album -->
+        <img src="https://i.imgur.com/Ww3Bxv2.png" alt="Jeddah Municipality Logo" />
+        <img src="https://i.imgur.com/iy9sAV2.png" alt="Applus Logo" />
       </div>
-      <div class="role" id="roleCleaner" data-type="cleaner">
-        <div class="role-icon">🧹</div>
-        <div class="role-title">عامل نظافة</div>
-        <div class="role-sub">Cleaner</div>
+      <div class="header-text">
+        <h1 class="title">Employee Tracking</h1>
+        <p class="subtitle">Jeddah Municipality – Applus Project</p>
       </div>
-    </div>
+    </header>
 
-    <!-- النموذج -->
-    <div id="formSection" style="display:none;">
+    <main class="card">
+      <section class="welcome">
+        <h2 class="welcome-title">Welcome to the tracking system</h2>
+        <p class="welcome-text">
+          Please choose your role, fill in your information, then start the tour.
+          The system will send your location automatically during the shift.
+        </p>
+      </section>
 
-      <label>رقم الموظف</label>
-      <input type="number" id="employeeId" placeholder="اكتب رقم الموظف">
+      <!-- ROLE SELECTION -->
+      <div class="form-section">
+        <p class="section-label">Select role</p>
+        <div class="role-row">
+          <button type="button" class="role-btn" id="role-driver">
+            <div class="role-btn-icon">🚚</div>
+            <div class="role-btn-text">
+              <span class="role-btn-title">Driver</span>
+              <span class="role-btn-sub">Truck team</span>
+            </div>
+          </button>
 
-      <label>اسم الموظف</label>
-      <input type="text" id="employeeName" placeholder="اكتب اسم الموظف">
-
-      <div id="truckField" style="display:none;">
-        <label>رقم الشاحنة</label>
-        <input type="text" id="truckId" placeholder="اكتب رقم الشاحنة أو اللوحة">
-      </div>
-
-      <label>آخر إحداثيات</label>
-      <input type="text" id="coordsDisplay" readonly placeholder="سيتم التحديد تلقائيًا">
-
-      <div class="btn-row">
-        <button id="btnStart">بدء الجولة</button>
-        <button id="btnStop" disabled>إنهاء الجولة</button>
-      </div>
-
-      <div class="status-box" id="statusBox">
-        <span class="status-badge" id="statusBadge">الحالة: متوقف</span>
-        <span id="statusText">اضغط على "بدء الجولة" لبدء التتبع.</span>
-        <div class="small">
-          سيتم إرسال موقعك كل ٥ دقائق تلقائيًا أثناء تشغيل التتبع.
+          <button type="button" class="role-btn" id="role-worker">
+            <div class="role-btn-icon">🧹</div>
+            <div class="role-btn-text">
+              <span class="role-btn-title">Cleaner</span>
+              <span class="role-btn-sub">Field worker</span>
+            </div>
+          </button>
         </div>
       </div>
 
-    </div>
+      <!-- FORM -->
+      <form id="tracking-form" onsubmit="return false;">
+        <div class="form-row">
+          <label for="employeeType">Employee type</label>
+          <input id="employeeType" type="text" value="Driver" readonly />
+        </div>
 
+        <div class="form-row">
+          <label for="employeeId">Employee ID</label>
+          <input id="employeeId" type="number" inputmode="numeric" autocomplete="off" />
+        </div>
+
+        <div class="form-row">
+          <label for="employeeName">Employee name</label>
+          <input id="employeeName" type="text" autocomplete="off" />
+        </div>
+
+        <div class="form-row" id="truck-row">
+          <label for="truckId">Truck number</label>
+          <input id="truckId" type="text" autocomplete="off" />
+        </div>
+
+        <div class="form-row">
+          <label for="tripKey">Trip key (optional)</label>
+          <input id="tripKey" type="text" autocomplete="off" />
+        </div>
+
+        <div class="form-row">
+          <label>Last coordinates</label>
+          <div class="coords" id="coords-display">
+            Waiting for location…
+          </div>
+          <p class="hint">
+            <strong>Note:</strong> Make sure location services (GPS) are enabled on the device.
+          </p>
+        </div>
+
+        <!-- STATUS BOX -->
+        <div class="status-box">
+          <div class="status-pill" id="status-pill">idle</div>
+          <div class="status-message" id="status-message">
+            Tracking has not started yet.
+          </div>
+        </div>
+
+        <!-- BUTTONS -->
+        <div class="btn-row">
+          <button type="button" class="btn btn-danger" id="btn-end" disabled>
+            End tour
+          </button>
+          <button type="button" class="btn btn-primary" id="btn-start">
+            Start tour
+          </button>
+        </div>
+
+        <p class="footer-note">
+          While tracking is active, your location will be sent automatically every
+          <strong>10 minutes</strong> with status <strong>running</strong>.  
+          At the beginning the status is <strong>start</strong>, and after finishing the tour it becomes
+          <strong>end</strong>.
+        </p>
+      </form>
+    </main>
   </div>
-</div>
 
-<script>
-  // 🔧 إعدادات عامة
-  const WEBHOOK_URL = "https://yasiralhmadiai.app.n8n.cloud/webhook/Employee-Tracking";
-  const UPDATE_INTERVAL_MINUTES = 5; // غيّرها إذا حاب (مثلاً 10)
-  const UPDATE_INTERVAL_MS = UPDATE_INTERVAL_MINUTES * 60 * 1000;
+  <script>
+    // ====== CONFIG ======
+    const WEBHOOK_URL = "https://yasiralahmadiai.app.n8n.cloud/webhook/Employee-Tracking";
+    const SEND_INTERVAL_MS = 10 * 60 * 1000; // 10 minutes
 
-  let selectedType = null;     // 'driver' أو 'cleaner'
-  let trackingInterval = null;
-  let currentTripKey = null;   // ثابت لكل جلسة تتبع
-  let currentStatus = "idle";
+    // ====== STATE ======
+    let currentRole = "driver"; // "driver" or "worker"
+    let trackingIntervalId = null;
+    let lastLat = null;
+    let lastLng = null;
+    let isTracking = false;
 
-  const roleDriver = document.getElementById("roleDriver");
-  const roleCleaner = document.getElementById("roleCleaner");
-  const formSection = document.getElementById("formSection");
-  const truckField = document.getElementById("truckField");
-  const employeeIdInput = document.getElementById("employeeId");
-  const employeeNameInput = document.getElementById("employeeName");
-  const truckIdInput = document.getElementById("truckId");
-  const coordsDisplay = document.getElementById("coordsDisplay");
-  const btnStart = document.getElementById("btnStart");
-  const btnStop = document.getElementById("btnStop");
-  const statusBox = document.getElementById("statusBox");
-  const statusBadge = document.getElementById("statusBadge");
-  const statusText = document.getElementById("statusText");
+    // ====== ELEMENTS ======
+    const roleDriverBtn = document.getElementById("role-driver");
+    const roleWorkerBtn = document.getElementById("role-worker");
 
-  // اختيار الدور
-  function selectRole(type) {
-    selectedType = type;
-    roleDriver.classList.toggle("selected", type === "driver");
-    roleCleaner.classList.toggle("selected", type === "cleaner");
-    formSection.style.display = "block";
-    truckField.style.display = (type === "driver") ? "block" : "none";
+    const employeeTypeInput = document.getElementById("employeeType");
+    const employeeIdInput = document.getElementById("employeeId");
+    const employeeNameInput = document.getElementById("employeeName");
+    const truckIdInput = document.getElementById("truckId");
+    const truckRow = document.getElementById("truck-row");
+    const tripKeyInput = document.getElementById("tripKey");
 
-    // إعادة الضبط
-    stopTracking(false);
-    statusText.textContent = 'أدخل البيانات ثم اضغط "بدء الجولة".';
-  }
+    const coordsDisplay = document.getElementById("coords-display");
+    const statusPill = document.getElementById("status-pill");
+    const statusMessage = document.getElementById("status-message");
 
-  roleDriver.addEventListener("click", () => selectRole("driver"));
-  roleCleaner.addEventListener("click", () => selectRole("cleaner"));
+    const btnStart = document.getElementById("btn-start");
+    const btnEnd = document.getElementById("btn-end");
 
-  // تحديث حالة الواجهة
-  function updateStatus(newStatus) {
-    currentStatus = newStatus;
-    statusBadge.className = "status-badge";
-    if (newStatus === "start") {
-      statusBadge.classList.add("status-start");
-      statusBadge.textContent = "الحالة: start";
-    } else if (newStatus === "running") {
-      statusBadge.classList.add("status-running");
-      statusBadge.textContent = "الحالة: running";
-    } else if (newStatus === "end") {
-      statusBadge.classList.add("status-end");
-      statusBadge.textContent = "الحالة: end";
-    } else {
-      statusBadge.textContent = "الحالة: متوقف";
-    }
-  }
+    // ====== ROLE SELECTION ======
+    function setRole(role) {
+      currentRole = role;
 
-  // الحصول على الموقع وإرساله
-  function sendLocation(statusForThisRecord) {
-    if (!navigator.geolocation) {
-      statusText.textContent = "⚠️ المتصفح لا يدعم تحديد الموقع.";
-      return;
+      if (role === "driver") {
+        roleDriverBtn.classList.add("selected");
+        roleWorkerBtn.classList.remove("selected");
+        employeeTypeInput.value = "Driver";
+        truckRow.style.display = "block";
+      } else {
+        roleWorkerBtn.classList.add("selected");
+        roleDriverBtn.classList.remove("selected");
+        employeeTypeInput.value = "Cleaner";
+        truckRow.style.display = "none";
+        truckIdInput.value = "";
+      }
     }
 
-    navigator.geolocation.getCurrentPosition(
-      (pos) => {
-        const lat = pos.coords.latitude.toFixed(6);
-        const lng = pos.coords.longitude.toFixed(6);
-        coordsDisplay.value = `${lat}, ${lng}`;
+    roleDriverBtn.addEventListener("click", () => setRole("driver"));
+    roleWorkerBtn.addEventListener("click", () => setRole("worker"));
 
-        const employeeId = employeeIdInput.value.trim();
-        const employeeName = employeeNameInput.value.trim();
-        const truckId = (selectedType === "driver") ? (truckIdInput.value.trim() || "") : "";
+    // default
+    setRole("driver");
 
-        const now = new Date().toISOString();
+    // ====== LOCATION ======
+    function updateCoordsDisplay(lat, lng) {
+      coordsDisplay.textContent = `${lng.toFixed(6)} , ${lat.toFixed(6)}`;
+    }
 
-        if (!currentTripKey) {
-          // tripKey = رقم الموظف + وقت بداية الجلسة
-          currentTripKey = `${employeeId}-${now}`;
+    function askForLocation(onSuccess, onError) {
+      if (!navigator.geolocation) {
+        statusMessage.innerHTML = '<span class="error">Geolocation is not supported in this browser.</span>';
+        if (onError) onError(new Error("no geolocation"));
+        return;
+      }
+
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          const lat = pos.coords.latitude;
+          const lng = pos.coords.longitude;
+          lastLat = lat;
+          lastLng = lng;
+          updateCoordsDisplay(lat, lng);
+          if (onSuccess) onSuccess(lat, lng);
+        },
+        (err) => {
+          console.error("Location error:", err);
+          statusMessage.innerHTML =
+            '<span class="error">Cannot get location. Please enable GPS and try again.</span>';
+          if (onError) onError(err);
+        },
+        {
+          enableHighAccuracy: true,
+          timeout: 15000,
+          maximumAge: 0
         }
+      );
+    }
 
-        const payload = new URLSearchParams({
-          employeeType: selectedType || "",
-          employeeId: employeeId,
-          employeeName: employeeName,
-          truckId: truckId,
-          latitude: lat,
-          longitude: lng,
-          timestamp: now,
-          status: statusForThisRecord,
-          tripKey: currentTripKey
-        });
+    // ====== SEND DATA TO WEBHOOK ======
+    async function sendToServer(status) {
+      const employeeId = employeeIdInput.value.trim();
+      const employeeName = employeeNameInput.value.trim();
+      const truckId = truckIdInput.value.trim();
+      const tripKey = tripKeyInput.value.trim();
+      const employeeType = employeeTypeInput.value.trim();
 
-        fetch(WEBHOOK_URL, {
+      if (!employeeId) {
+        alert("Please enter Employee ID.");
+        return;
+      }
+      if (!employeeName) {
+        alert("Please enter Employee name.");
+        return;
+      }
+      if (currentRole === "driver" && !truckId) {
+        alert("Please enter Truck number.");
+        return;
+      }
+
+      if (lastLat == null || lastLng == null) {
+        statusMessage.innerHTML =
+          '<span class="error">Location not ready yet. Please try again.</span>';
+        return;
+      }
+
+      const payload = {
+        employeeType,
+        employeeId,
+        employeeName,
+        truckId: currentRole === "driver" ? truckId : "",
+        latitude: lastLat,
+        longitude: lastLng,
+        status,
+        tripKey,
+        timestamp: new Date().toISOString()
+      };
+
+      try {
+        const res = await fetch(WEBHOOK_URL, {
           method: "POST",
           headers: {
-            "Content-Type": "application/x-www-form-urlencoded"
+            "Content-Type": "application/json"
           },
-          body: payload.toString()
-        }).then(res => {
-          if (!res.ok) {
-            console.error("Webhook error", res.status);
-            statusText.textContent = "⚠️ تم تحديد الموقع لكن حدث خطأ في الإرسال.";
-          } else {
-            if (statusForThisRecord === "start") {
-              statusText.textContent = "تم بدء الجولة والتسجيل الآن. سيتم التحديث تلقائيًا.";
-            } else if (statusForThisRecord === "running") {
-              statusText.textContent = `تم تحديث الموقع بنجاح (الحالة running).`;
-            } else if (statusForThisRecord === "end") {
-              statusText.textContent = "تم إنهاء الجولة وتسجيل آخر موقع.";
-            }
-          }
-        }).catch(err => {
-          console.error("Network error", err);
-          statusText.textContent = "⚠️ فشل الاتصال بالسيرفر أثناء الإرسال.";
+          body: JSON.stringify(payload)
         });
-      },
-      (err) => {
-        console.error("Geolocation error", err);
-        statusText.textContent = "⚠️ لم نتمكن من الحصول على موقعك. تأكد من تشغيل خدمة الموقع.";
-      },
-      {
-        enableHighAccuracy: true,
-        timeout: 15000,
-        maximumAge: 0
+
+        if (!res.ok) {
+          throw new Error("HTTP " + res.status);
+        }
+
+        statusPill.textContent = status;
+        if (status === "start") {
+          statusMessage.textContent = "Tracking started successfully.";
+        } else if (status === "running") {
+          statusMessage.textContent = "Location sent while tracking is running.";
+        } else if (status === "end") {
+          statusMessage.textContent = "Tracking ended and last location was sent.";
+        }
+      } catch (err) {
+        console.error("Send error:", err);
+        statusMessage.innerHTML =
+          '<span class="error">Server connection failed while sending.</span>';
       }
-    );
-  }
-
-  // بدء التتبع
-  function startTracking() {
-    if (!selectedType) {
-      alert("اختر نوع الموظف أولاً (سائق أو عامل نظافة).");
-      return;
     }
 
-    const employeeId = employeeIdInput.value.trim();
-    const employeeName = employeeNameInput.value.trim();
+    // ====== BUTTONS ======
+    btnStart.addEventListener("click", () => {
+      if (isTracking) return;
 
-    if (!employeeId || !employeeName) {
-      alert("الرجاء تعبئة رقم الموظف واسم الموظف.");
-      return;
-    }
+      statusPill.textContent = "start";
+      statusMessage.textContent = "Getting location…";
 
-    if (selectedType === "driver" && !truckIdInput.value.trim()) {
-      alert("الرجاء تعبئة رقم الشاحنة.");
-      return;
-    }
+      btnStart.disabled = true;
+      btnEnd.disabled = false;
 
-    // أول سجل: start
-    updateStatus("start");
-    sendLocation("start");
+      // First location + start
+      askForLocation(
+        () => {
+          sendToServer("start");
+        },
+        () => {
+          btnStart.disabled = false;
+          btnEnd.disabled = true;
+        }
+      );
 
-    // بعدها سجلات running كل فترة
-    trackingInterval = setInterval(() => {
-      updateStatus("running");
-      sendLocation("running");
-    }, UPDATE_INTERVAL_MS);
+      // Interval for running status
+      trackingIntervalId = setInterval(() => {
+        askForLocation(() => {
+          sendToServer("running");
+        });
+      }, SEND_INTERVAL_MS);
 
-    btnStart.disabled = true;
-    btnStop.disabled = false;
-  }
+      isTracking = true;
+    });
 
-  // إيقاف التتبع
-  function stopTracking(sendEndRecord = true) {
-    if (trackingInterval) {
-      clearInterval(trackingInterval);
-      trackingInterval = null;
-    }
+    btnEnd.addEventListener("click", () => {
+      if (!isTracking) return;
 
-    if (sendEndRecord && currentTripKey) {
-      updateStatus("end");
-      sendLocation("end");
-    } else {
-      updateStatus("idle");
-      statusText.textContent = 'التتبع متوقف. يمكنك بدء جولة جديدة.';
-    }
+      clearInterval(trackingIntervalId);
+      trackingIntervalId = null;
+      isTracking = false;
 
-    btnStart.disabled = false;
-    btnStop.disabled = true;
-    currentTripKey = null;
-  }
+      statusPill.textContent = "end";
+      statusMessage.textContent = "Finishing tracking and sending last location…";
 
-  btnStart.addEventListener("click", startTracking);
-  btnStop.addEventListener("click", () => stopTracking(true));
-</script>
+      btnStart.disabled = false;
+      btnEnd.disabled = true;
 
+      askForLocation(() => {
+        sendToServer("end");
+      });
+    });
+  </script>
 </body>
 </html>
